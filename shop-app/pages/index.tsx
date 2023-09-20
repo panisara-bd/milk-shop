@@ -1,51 +1,15 @@
 import styled from 'styled-components';
-import { colors } from '../helpers/colors';
+import { colors } from '@/helpers/colors';
 import { SearchBar } from '@/components/SearchBar';
-import { useEffect, useState } from 'react';
-import { ProductType } from '@/types';
-import { ProductCard } from '@/components/ProductCard';
+import { useState } from 'react';
 import { FilterByTypes } from '@/components/FilterByTypes';
-import { Pagination } from '@/components/Pagination';
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '@/helpers/grapql-queries';
-
-const LIMIT = 9;
-
-const useDebouncedSearch = (fetchFn: () => void, searchQuery: string) => {
-  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout>();
-
-  useEffect(() => {
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout);
-    }
-
-    if (searchQuery === '') {
-      fetchFn();
-      return;
-    }
-
-    const timeout = setTimeout(fetchFn, 500);
-    setDebounceTimeout(timeout);
-  }, [searchQuery]);
-};
-
+import { SearchResult } from "@/components/SearchResult";
+import { ProductType } from "@/types";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [checkedTypes, setCheckedTypes] = useState<string[]>([]);
-  const [offset, setOffset] = useState(0);
-  
-  const queryVariables = {
-    variables: { searchQuery: searchQuery, types: checkedTypes, limit: LIMIT, offset: offset },
-  };
+  const [checkedTypes, setCheckedTypes] = useState<ProductType[]>([]);
 
-  const { loading, error, data: productsResult, refetch } = useQuery(GET_PRODUCTS, queryVariables);
-  
-  useDebouncedSearch(refetch, searchQuery);
-
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>{error.message}</p>
-  const { products, count } = productsResult.products
   return (
     <ContentWraper>
       <SubHeader>
@@ -60,23 +24,15 @@ export default function Home() {
           Results for{' '}
           {searchQuery !== '' && <SearchQuery>{searchQuery}</SearchQuery>}
           {checkedTypes.map((type) => (
-            <SearchQuery isFilter key={type}>
-              {type}
+            <SearchQuery isFilter key={type.id}>
+              {type.name}
             </SearchQuery>
           ))}
         </ResultChipsContainer>
       ) : null}
-      <ProductsCount>{count} products</ProductsCount>
-      <CardsContainer>
-        {products.map((product: ProductType) => (
-          <ProductCard key={product.id} product={product} id={product.id} />
-        ))}
-      </CardsContainer>
-      <Pagination
-        count={count}
-        limit={LIMIT}
-        setOffset={setOffset}
-        offset={offset}
+      <SearchResult
+        searchQuery={searchQuery}
+        checkedTypes={checkedTypes}
       />
     </ContentWraper>
   );
@@ -122,7 +78,7 @@ const ResultChipsContainer = styled.div`
 
 const SearchQuery = styled.span<{ isFilter?: boolean }>`
   background: ${(props) =>
-    props.isFilter ? 'rgba(0,0,0,0.1)' : 'rgba(255, 255, 255, 0.2)'};
+          props.isFilter ? 'rgba(0,0,0,0.1)' : '#ffffff'};
   padding: 5px 15px;
   border-radius: 20px;
 `;

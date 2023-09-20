@@ -1,4 +1,4 @@
-import { ProductType } from '@/types';
+import { Product } from '@/types';
 import React, {
   PropsWithChildren,
   useContext,
@@ -7,13 +7,13 @@ import React, {
 } from 'react';
 
 type Cart = Array<{
-  product: ProductType;
+  product: Product;
   qty: number;
 }>;
 
 type CartContextType = {
   cart: Cart;
-  addProductToCart: (product: ProductType, qty: number) => void;
+  addProductToCart: (product: Product, qty: number) => void;
   removeProductFromCart: (productId: string) => void;
   isCartOpen: boolean;
   setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,7 +52,7 @@ export const CartContextProvider: React.FC<PropsWithChildren> = ({
     updateLocalStorage(newCart);
   };
 
-  const addProductToCart = (product: ProductType, qty: number) => {
+  const addProductToCart = (product: Product, qty: number) => {
     const currentItem = cart.find((item) => item.product.id === product.id);
     if (!currentItem) {
       const newCart = [...cart, { product, qty }];

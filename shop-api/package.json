@@ -8,15 +8,20 @@
     "compile": "tsc",
     "start": "npm run compile && node ./dist/src/index.js"
   },
-
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.6.3",
+    "prisma": "^5.3.1",
+    "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "@apollo/server": "^4.9.3",
+    "@prisma/client": "^5.3.1",
     "graphql": "^16.8.1"
   }
 }

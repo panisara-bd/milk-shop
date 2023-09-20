@@ -1,40 +1,52 @@
+export type SearchInput = {
+  searchQuery?: string
+  types?: [string]
+  limit: number
+  offset: number
+}
+
 export const schema = `#graphql
- type Product {
+type Product {
     name: String
-    type: String
+    type: ProductType
     storage: Int
     id: String
- }
+}
 
- type ProductsResult {
+type ProductType {
+    name: String
+    id: String
+}
+
+type ProductsResult {
     products: [Product]
     count: Int
- }
+}
 
- input SearchInput {
+input SearchInput {
     searchQuery: String
     types: [String]
-    limit: Int
-    offset: Int
- }
+    limit: Int!
+    offset: Int!
+}
 
- type Query {
+type Query {
     products (input: SearchInput): ProductsResult
     product (id: String): Product
-    types: [String]
- }
+    types: [ProductType]
+}
 
-  input CreateNewProductInput {
+input CreateNewProductInput {
     name: String
     type: String
     storage: Int
-  }
+}
 
-  type CreateNewProductOutPut {
+type CreateNewProductOutput {
     product: Product
-  }
+}
 
-  type Mutation {
-    createNewProduct (input: CreateNewProductInput!): CreateNewProductOutPut
- }
+type Mutation {
+    createNewProduct (input: CreateNewProductInput!): CreateNewProductOutput
+}
 `;

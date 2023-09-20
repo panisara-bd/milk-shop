@@ -6,7 +6,7 @@ type Props = {
   count: number;
   limit: number;
   offset: number;
-  setOffset: React.Dispatch<React.SetStateAction<number>>;
+  setOffset: (offset: number) => void;
 };
 
 export const Pagination = ({ count, limit, setOffset, offset }: Props) => {

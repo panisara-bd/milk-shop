@@ -1,22 +1,22 @@
 import { colors } from '@/helpers/colors';
 import { GET_TYPES } from '@/helpers/grapql-queries';
-import { fetchTypes } from '@/helpers/productsApi';
 import { useQuery } from '@apollo/client';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { ProductType } from "@/types";
 
 type Props = {
-  checkedTypes: string[];
-  setCheckedTypes: React.Dispatch<React.SetStateAction<string[]>>;
+  checkedTypes: ProductType[];
+  setCheckedTypes: React.Dispatch<React.SetStateAction<ProductType[]>>;
 };
 
 export const FilterByTypes = ({ checkedTypes, setCheckedTypes }: Props) => {
   const [isShowFilter, setIsShowFilter] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
-  const { loading, error, data: typesArray } = useQuery(GET_TYPES);
+  const { loading, error, data } = useQuery(GET_TYPES);
 
   const handleClick = async () => {
     setIsShowFilter(!isShowFilter);
@@ -37,9 +37,9 @@ export const FilterByTypes = ({ checkedTypes, setCheckedTypes }: Props) => {
     };
   }, [filterRef]);
 
-  const handleChange = (type: string, isChecked: boolean) => {
+  const handleChange = (type: ProductType, isChecked: boolean) => {
     const otherCheckedTypes = checkedTypes.filter(
-      (checkedType) => checkedType !== type
+      (checkedType) => checkedType.id !== type.id
     );
     setCheckedTypes(
       isChecked ? [...otherCheckedTypes, type] : otherCheckedTypes
@@ -48,6 +48,8 @@ export const FilterByTypes = ({ checkedTypes, setCheckedTypes }: Props) => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error.message}</p>;
+
+  const { types: typesArray } = data;
   return (
     <div ref={filterRef}>
       <FilterTextContainer onClick={handleClick}>
@@ -59,15 +61,15 @@ export const FilterByTypes = ({ checkedTypes, setCheckedTypes }: Props) => {
       </FilterTextContainer>
       {isShowFilter ? (
         <TypesContainer>
-          {typesArray.map((type: string) => (
-            <TypeLabel key={type}>
+          {typesArray.map((type: ProductType) => (
+            <TypeLabel key={type.id}>
               <Checkbox
                 type="checkbox"
-                checked={checkedTypes.includes(type)}
+                checked={checkedTypes.some(checkedType => checkedType.id === type.id)}
                 onChange={(event) => handleChange(type, event.target.checked)}
-                value={type}
+                value={type.id}
               />
-              {type}
+              {type.name}
             </TypeLabel>
           ))}
         </TypesContainer>

@@ -1,11 +1,10 @@
 import { colors } from '@/helpers/colors';
-import { HOST } from '@/helpers/grapql-queries';
-import { ProductType } from '@/types';
+import { Product } from '@/types';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 type Props = {
-  product: ProductType;
+  product: Product;
   id: string;
 };
 
@@ -14,12 +13,12 @@ export const ProductCard = ({ product, id }: Props) => {
   return (
     <CardContainer key={product.id} onClick={() => router.push(id)}>
       <ImageContainer>
-        <Image src={`${HOST}/${product.image}`} />
+        <Image alt={product.name} src="/milk.png" />
       </ImageContainer>
       <CardTexts>
         <Name>{product.name}</Name>
         <CardFooter>
-          <Type>{product.type}</Type>
+          <Type>{product.type.name}</Type>
           <Qty>{product.storage} liters</Qty>
         </CardFooter>
       </CardTexts>

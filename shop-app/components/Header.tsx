@@ -14,7 +14,6 @@ export const Header = () => {
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-direction: center;
   justify-content: center;
   width: 100%;
 `;

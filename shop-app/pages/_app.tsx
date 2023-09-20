@@ -9,9 +9,10 @@ import { colors } from '@/helpers/colors';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import styled from 'styled-components';
+import { HOST } from "@/helpers/grapql-queries";
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
+  uri: HOST,
   cache: new InMemoryCache(),
 });
 

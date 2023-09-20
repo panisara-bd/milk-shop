@@ -1,11 +1,10 @@
 import { useCartContext } from '@/helpers/CartContext';
 import { colors } from '@/helpers/colors';
-import { HOST } from '@/helpers/grapql-queries';
-import { ProductType } from '@/types';
+import { Product } from '@/types';
 import styled from 'styled-components';
 
 type Props = {
-  product: ProductType;
+  product: Product;
   qty: number;
 };
 
@@ -14,11 +13,11 @@ export const ProductInCart = ({ product, qty }: Props) => {
   return (
     <Container>
       <ProductImageContainer>
-        <ProductImage src={`${HOST}/${product.image}`} />
+        <ProductImage alt={product.name} src="/milk.png" />
       </ProductImageContainer>
       <ProductDetails>
         <ProductTitle>{product.name}</ProductTitle>
-        <ProductType>{product.type}</ProductType>
+        <ProductType>{product.type.name}</ProductType>
         <ProductQty>{qty} liters</ProductQty>
         <RemoveItemButton
           type="button"

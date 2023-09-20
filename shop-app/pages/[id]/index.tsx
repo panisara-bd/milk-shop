@@ -1,7 +1,6 @@
 import { useCartContext } from '@/helpers/CartContext';
 import { colors } from '@/helpers/colors';
 import { GET_PRODUCT } from '@/helpers/grapql-queries';
-import { HOST } from '@/helpers/grapql-queries';
 import { useQuery } from '@apollo/client';
 import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,11 +43,11 @@ export default function ProductPage() {
       ) : (
         <ProductContainer>
           <ImageContainer>
-            <Image src={`${HOST}/${product.image}`} />
+            <Image alt={product.name} src="/milk.png" />
           </ImageContainer>
           <DetailContainer>
             <ProductName>{product.name}</ProductName>
-            <ProductText>{product.type}</ProductText>
+            <ProductText>{product.type.name}</ProductText>
             <ProductStorage>{product.storage} liters</ProductStorage>
             <InputRange
               type="range"
