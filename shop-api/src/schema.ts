@@ -38,7 +38,7 @@ type Query {
 
 input CreateNewProductInput {
     name: String
-    type: String
+    typeId: String
     storage: Int
 }
 

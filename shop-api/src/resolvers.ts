@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-import { PRODUCTS } from './data/products';
 import { Prisma, PrismaClient } from "@prisma/client";
 import { SearchInput } from "./schema";
 
@@ -32,9 +30,18 @@ export const resolvers = {
     types: () => prisma.productType.findMany(),
   },
   Mutation: {
-    createNewProduct: ({ name, storage, type }) => {
-      const id = randomUUID()
-      return PRODUCTS.push({ id, name: name, storage: storage, type: type })
+    // this mutation is a proof-of-concept and it's meant to be ran by an admin
+    // it should be protected with an authentication strategy
+    createNewProduct: async ({ name, storage, typeId }) => {
+      return {
+        product: await prisma.product.create({
+        data: {
+          name,
+          storage,
+          typeId
+        }
+      })
+    }
     }
   }
 };
